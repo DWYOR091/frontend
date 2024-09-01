@@ -14,6 +14,10 @@ const router = createBrowserRouter([
     path: "/categories",
     element: privatePage.categoriesPage,
   },
+  {
+    path: "/categories/create",
+    element: privatePage.createCategoriesPage,
+  },
 ]);
 
 export default router;

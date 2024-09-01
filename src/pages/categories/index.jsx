@@ -1,22 +1,13 @@
-import { Container, Nav, Navbar } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import SBreadcrumb from "../../components/Breadcrumb";
-import Navlink from "../../components/Navlink";
+import SNavbar from "../../components/Navbar";
 
 export default function Categories() {
   return (
     <>
-      <Navbar bg="dark" data-bs-theme="dark">
-        <Container>
-          <Navbar.Brand href="#home">Semina</Navbar.Brand>
-          <Nav className="me-auto">
-            <Navlink href={``} nameLink={`Home`} />
-            <Navlink href={`/categories`} nameLink={`Categories`} />
-            <Navlink href={``} nameLink={`Home`} />
-          </Nav>
-        </Container>
-      </Navbar>
+      <SNavbar />
       <Container>
-        <SBreadcrumb textSecond={`categories`} textThird={"hoho"} />
+        <SBreadcrumb textSecond={`categories`} />
       </Container>
     </>
   );

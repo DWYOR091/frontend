@@ -4,7 +4,7 @@ import axios from "axios";
 import SAlert from "../../components/Alert";
 import { config } from "../../configs";
 import SForm from "./Form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 
 export default function Signin() {
   // const [email,setEmail] = useState('')
@@ -22,6 +22,9 @@ export default function Signin() {
 
   const navigate = useNavigate();
 
+  const token = localStorage.getItem("token");
+  if (token) return <Navigate to={`/dashboard`} />;
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -29,9 +32,10 @@ export default function Signin() {
   const handleSubmit = async () => {
     try {
       setIsLoading(true);
-      const res = await axios.post(`${config.api_host_dev}/cms/auth/signin`, {
-        form,
-      });
+      const res = await axios.post(
+        `${config.api_host_dev}/cms/auth/signin`,
+        form
+      );
       localStorage.setItem("token", res.data.data.token);
       setIsLoading(false);
 
