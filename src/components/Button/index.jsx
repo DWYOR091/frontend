@@ -16,6 +16,7 @@ const SButton = (props) => {
       onClick={action}
       size={size}
       className={className}
+      disabled={disabled}
     >
       {loading ? "loading..." : children}
     </Button>

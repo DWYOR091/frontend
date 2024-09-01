@@ -1,17 +1,26 @@
 import { useState } from "react";
-import { Card, Form, Container } from "react-bootstrap";
-import SButton from "../../components/Button";
-import TextWithInputLabel from "../../components/TextInputWithLabel";
+import { Card, Container } from "react-bootstrap";
 import axios from "axios";
-impo;
+import SAlert from "../../components/Alert";
+import { config } from "../../configs";
+import SForm from "./Form";
+import { useNavigate } from "react-router-dom";
 
 export default function Signin() {
   // const [email,setEmail] = useState('')
-  const [error, setError] = useState("");
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
+  const [alert, setAlert] = useState({
+    status: false,
+    message: "",
+    type: "",
+  });
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -19,49 +28,43 @@ export default function Signin() {
 
   const handleSubmit = async () => {
     try {
-      const res = await axios.post(
-        "http://localhost:9000/api/v1/cms/auth/signin",
-        {
-          email: form.email,
-          password: form.password,
-        }
-      );
-      console.log(res);
+      setIsLoading(true);
+      const res = await axios.post(`${config.api_host_dev}/cms/auth/signin`, {
+        form,
+      });
+      localStorage.setItem("token", res.data.data.token);
+      setIsLoading(false);
+
+      navigate("/dashboard");
     } catch (error) {
-      setError(error.response.data.msg);
-      console.log(error.response.data.msg);
+      setIsLoading(false);
+      setAlert({
+        status: true,
+        message: error.response.data.msg,
+        type: "danger",
+      });
     }
   };
+
   return (
     <Container>
-      {error ? (
-        <Alert variant={`danger`} className="mt-5">
-          {error}
-        </Alert>
-      ) : (
-        ""
+      {alert.status && (
+        <SAlert
+          variant={alert.type}
+          style={{ width: "50%" }}
+          className={`mx-auto mt-5 text-center`}
+          message={alert.message}
+        />
       )}
-      <Card style={{ width: "50%" }} className="m-auto mt-5">
+      <Card style={{ width: "50%" }} className="m-auto mt-4">
         <Card.Body>
           <Card.Title className="text-center fs-3">Form Login</Card.Title>
-          <Form>
-            <TextWithInputLabel
-              label="Email"
-              type="email"
-              placeholder="Masukan email!"
-              name="email"
-              onChange={handleChange}
-            />
-            <TextWithInputLabel
-              label="Password"
-              type="password"
-              placeholder="Masukan password!"
-              name="password"
-              onChange={handleChange}
-            />
-
-            <SButton action={handleSubmit}>Signin</SButton>
-          </Form>
+          <SForm
+            handleChange={handleChange}
+            handleSubmit={handleSubmit}
+            isLoading={isLoading}
+            form={form}
+          />
         </Card.Body>
       </Card>
     </Container>
