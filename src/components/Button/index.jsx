@@ -1,4 +1,4 @@
-import { Button } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 
 const SButton = (props) => {
   const {
@@ -18,7 +18,13 @@ const SButton = (props) => {
       className={className}
       disabled={disabled}
     >
-      {loading ? "loading..." : children}
+      {loading ? (
+        <div>
+          <Spinner animation="border" size="sm" /> Loading...
+        </div>
+      ) : (
+        children
+      )}
     </Button>
   );
 };
