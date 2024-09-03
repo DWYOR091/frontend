@@ -5,6 +5,8 @@ import SAlert from "../../components/Alert";
 import { config } from "../../configs";
 import SForm from "./Form";
 import { useNavigate, Navigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { user_login } from "../../redux/auth/authSlice";
 
 export default function Signin() {
   // const [email,setEmail] = useState('')
@@ -22,7 +24,8 @@ export default function Signin() {
 
   const navigate = useNavigate();
 
-  const token = localStorage.getItem("token");
+  const dispatch = useDispatch();
+  const token = localStorage.getItem("auth");
   if (token) return <Navigate to={`/dashboard`} />;
 
   const handleChange = (e) => {
@@ -36,7 +39,11 @@ export default function Signin() {
         `${config.api_host_dev}/cms/auth/signin`,
         form
       );
-      localStorage.setItem("token", res.data.data.token);
+      console.log(res);
+      dispatch(
+        user_login({ token: res.data.data.token, role: res.data.data.role })
+      );
+
       setIsLoading(false);
 
       navigate("/dashboard");

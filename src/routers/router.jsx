@@ -7,6 +7,10 @@ const router = createBrowserRouter([
     element: commonPage.loginPage,
   },
   {
+    path: "/todo",
+    element: commonPage.todoPage,
+  },
+  {
     path: "/dashboard",
     element: privatePage.dashboardPage,
   },
